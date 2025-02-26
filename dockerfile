@@ -1,17 +1,18 @@
 # Use official Python image
 FROM python:3.10
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
 # Set working directory
 WORKDIR /hello_project
 
-# Copy project files
-COPY . .
-
 # Install dependencies
-RUN pip install --no-cache-dir django djangorestframework djangorestframework-simplejwt
+COPY Pipfile Pipfile.lock /hello_project/
+RUN pip install pipenv && pipenv install --system
 
-# Expose port
-EXPOSE 8000
+# Copy project files
+COPY . /hello_project/
 
-# Run the server
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
